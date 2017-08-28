@@ -1,3 +1,5 @@
+[SKIP to Start Bookmarks Project](https://github.com/stevewitman/bookmarks/blob/master/BOOKMARKS.md)
+
 # Intro to Angular 4
 
 ```
@@ -205,3 +207,5 @@ Now back in the app.component template, create a ul with an li element as shown
   <li *ngFor="let color of colors">{{ color }}</li>
 </ul>
 ```
+
+[GO to Start Bookmarks Project](https://github.com/stevewitman/bookmarks/blob/master/BOOKMARKS.md)
