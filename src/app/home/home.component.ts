@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BookmarksService } from '../shared/bookmarks.service';
 
 @Component({
   selector: 'app-home',
@@ -7,16 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   
-  bookmarks = [
-    {name: 'Angular', url: 'https://angular.io/'},
-    {name: 'Angular Style Guide', url: 'https://angular.io/docs/ts/latest/guide/style-guide.html'},
-    {name: 'ngDoc', url: 'http://ngdoc.io/'},
-    {name: 'Firebase', url: 'https://firebase.com'},
-  ]
+  bookmarks;
 
-  constructor() { }
+  constructor(private _bookmarksService: BookmarksService) { }
 
   ngOnInit() {
+    this.bookmarks = this._bookmarksService.bookmarks;
   }
+
+  addBookmark(name, url) {
+    this._bookmarksService.addBookmark(name, url);
+  }
+
+  
 
 }

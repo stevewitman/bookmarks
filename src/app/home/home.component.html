@@ -1,3 +1,8 @@
-<div *ngFor="let bookmark of bookmarks">
+<div *ngFor="let bookmark of bookmarks | async">
   <app-bookmark [bmName]="bookmark.name" [bmUrl]="bookmark.url"></app-bookmark>
+</div>
+<div>
+  <input placeholder="name" #name>
+  <input placeholder="url" #url>
+  <button class="btn btn-primary" (click)="addBookmark(name, url)">Add Bookmark</button>
 </div>
