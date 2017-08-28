@@ -31,9 +31,9 @@ Change some html in the `app.component.html`
 Change title property in `app.component.ts`
 ```
 // from
-    title = 'app works!';
+    title = 'app';
 // to
-    title = 'This app works!';
+    title = 'Angular Boulder';
 ```
 
 Add style to `styles.css`. These are global styles.
@@ -57,7 +57,7 @@ h1 {
 Add jQuery, Bootstrap, and ngx-bootstrap using NPM
 
 ```
-npm install jquery bootstrap ngx-bootstrap --save
+npm install --save jquery bootstrap 
 ```
 
 Add this style to "styles": ["styles.css"] in `.angular-cli.json`
@@ -149,20 +149,12 @@ Use event binding to handle events raised by the DOM such as clicks and keystrok
 <button class="btn btn-primary" (click)="onClick()">Submit</button>
 ```
 
-Write the onClick() method in  `app.component.ts`
+Write the onClick() method in `app.component.ts` to toggle the isActive property
 
 ```
 onClick() {
-    console.log('Clicked!');
-}
-```
-
-Lets also have that method toggle the isActive property 
-
-```
-onClick() {
-    console.log('Clicked!');
     this.isActive = !this.isActive;
+    console.log(isActive);
 }
 ```
 
@@ -174,7 +166,7 @@ Create a div with the class `well` and put some text in it
 
 ```
 <div class="well">
-  <p >here</p>
+  <h3>First div</h3>
 </div>
 ```
 
@@ -182,7 +174,7 @@ Now add the *ngIf directive. The well is only visible when the isActive property
 
 ```
 <div class="well" *ngIf="isActive">
-  <p>well</p>
+  <h3>First div</h3>
 </div>
 ```
 
@@ -190,7 +182,7 @@ Copy and paste that div and change as shown here to toggle between wells
 
 ```
 <div class="well" *ngIf="!isActive">
-  <p>another well</p>
+  <h3>Second div</h3>
 </div>
 ```
 
