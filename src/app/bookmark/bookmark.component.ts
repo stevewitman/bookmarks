@@ -12,7 +12,7 @@ export class BookmarkComponent implements OnInit {
   ngOnInit() {
   }
 
-  @Input() bmName;
-  @Input() bmUrl;
+  @Input() bookmarkName;
+  @Input() bookmarkUrl;
 
 }

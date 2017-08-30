@@ -1,5 +1,5 @@
 <div *ngFor="let bookmark of bookmarks | async">
-  <app-bookmark [bmName]="bookmark.name" [bmUrl]="bookmark.url"></app-bookmark>
+  <app-bookmark [bookmarkName]="bookmark.name" [bookmarkUrl]="bookmark.url"></app-bookmark>
 </div>
 <div>
   <input placeholder="name" #name>

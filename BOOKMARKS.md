@@ -83,7 +83,7 @@ Change the html in the template `navbar.component.html`
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">My Links</a>
+      <a class="navbar-brand" href="#">Sign In</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
@@ -136,6 +136,13 @@ Use ngFor to display each these bookmarks in `home.component.html`
 
 In the `app.component.html`, wrap the app-home component with a div with class main-content.
 
+```
+<app-navbar></app-navbar>
+<div class="main-content">
+  <app-home></app-home>
+</div>
+```
+
 Define this style in `app.component.css`
 
 ```
@@ -152,35 +159,42 @@ Use the CLI to generate a bookmark component
 ng g c bookmark
 ```
 
-copy the html for the bookmarks into `bookmark.component.html`
+We will use this component as a child component in the home component.  In `home.component.html`, replace
 
 ```
 <a href="{{bookmark.url}}">{{ bookmark.name }}</a>
 ```
 
-In `bookmarks.component.ts`, add `Input` to the imports from @angular/core
+with ...
+
+```
+<app-bookmark></app-bookmark>
+```
+
+Here we need to pass the bookmark name and url properties to the bookmark component.  
+
+```
+<app-bookmark [bookmarkName]="bookmark.name" [bookmarkUrl]="bookmark.url"></app-bookmark>
+```
+
+In `bookmarks.component.ts`, import Input from @angular/core
 
 ```
 import { Component, OnInit, Input } from '@angular/core';
 ```
 
-Use `@Input()` to get data from the parent component
-
+Use `@Input()` to get bookmarkName and bookmarkUrl values.  Put this inside the 
 ```
-@Input() bmName;
-@Input() bmUrl;
-```
-
- In the parent componet, `home.component.html`, in this case, we will loop through each bookmark and use the bookmark component to display them. We will use property binding to pass data to the bookmark component.
-
-```
-<app-bookmark [bmName]="bookmark.name" bmUurl]="bookmark.url"></app-bookmark>
+@Input() bookmarkName;
+@Input() bookmarkUrl;
 ```
 
 In `bookmark.component.html` use the new properties created with the @Input functions
 
 ```
-<a href="{{bmUrl}}">{{ bmName }}</a>
+<a href="{{ bookmarkUrl }}">
+  {{ bookmarkmName }}
+</a>
 ```
 
 Finally lets add a little styling to the bookmark component.
@@ -188,7 +202,11 @@ Finally lets add a little styling to the bookmark component.
 First, add a div with a class `bookmark` in `bookmark.component.html`
 
 ```
-<a href="{{bmUrl}}" ><div class="bookmark">{{bmName}}</div></a>
+<a href="{{ bookmarkUrl }}">
+  <div class="bookmark">
+    {{ bookmarkName }}
+  </div>
+</a>
 ```
 
 And define that class in `bookmark.component.css`
@@ -224,7 +242,7 @@ bookmarks = [
 ];
 ```
 
-Remove the bookmarks array from `bookmarks.component.ts` and just leave ...
+Remove the array of bookmarks from `bookmarks.component.ts` and just just declare `bookmarks` ...
 
 ```
 bookmarks;
@@ -242,11 +260,11 @@ constructor(private _bookmarksService: BookmarksService) { }
 
 ```
 ngOnInit() {
-    this.bookmarks = this._bookmarksService.bookmarks;
+  this.bookmarks = this._bookmarksService.bookmarks;
 }
 ```
 
-Now look in the browser and in the console we can see an error telling use that there is still no provider for the BookmarksService.  Lets add that provider in `app.module.ts`
+If you look in the browser, in the console we can see an error telling use that there is still no provider for the BookmarksService.  Lets add that provider in `app.module.ts` by importing it and adding it to the providers array.
 
 ```
 import { BookmarksService } from './shared/bookmarks.service';
@@ -255,6 +273,8 @@ import { BookmarksService } from './shared/bookmarks.service';
 ```
 providers: [BookmarksService],
 ```
+
+Now you should see working links from data from the boookmarks service.
 
 ## Firebase
 
@@ -290,31 +310,37 @@ Install [angularfire2](https://github.com/angular/angularfire2) (Before you star
 npm install --save angularfire2 firebase 
 ```
 
-Import AngularFireModule & AngularFireDatabaseModule in `app.module.ts`
+Open `/src/environments/environment.ts` and add your Firebase configuration:
+
+```
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: '<your-key>',
+    authDomain: '<your-project-authdomain>',
+    databaseURL: '<your-database-URL>',
+    projectId: '<your-project-id>',
+    storageBucket: '<your-storage-bucket>',
+    messagingSenderId: '<your-messaging-sender-id>'
+  }
+};
+```
+
+Copy and replace the above `firebase` object from your Firebase project. 
+
+Import AngularFireModule, AngularFireDatabaseModule, and environment in `app.module.ts`
 
 ```
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { environment } from '../environments/environment';
 ```
 
 Add these modules to the @NgModule imports array in `app.module.ts`
 
 ```
-AngularFireModule.initializeApp(),
+AngularFireModule.initializeApp(environment.firebase)
 AngularFireDatabaseModule,
-```
-
-Copy the configuration object from Firebase and use as argument for initializeApp() method
-
-```
-AngularFireModule.initializeApp({
-    apiKey: "...",
-    authDomain: "...",
-    databaseURL: "...",
-    projectId: "...",
-    storageBucket: "...",
-    messagingSenderId: "..."
-}),
 ```
 
 Import AngularFireDatabase in `bookmarks.service.ts`
@@ -323,10 +349,10 @@ Import AngularFireDatabase in `bookmarks.service.ts`
 import { AngularFireDatabase } from 'angularfire2/database';
 ```
 
-Declare a variable called bookmarks (which will be a Firebase list object) in `bookmarks.service.ts`
+Remove the hardcoded array of bookmarks and in it's place declare a variable called bookmarks (which will be a Firebase list object) in `bookmarks.service.ts`
 
 ```
-links;
+bookmarks;
 ```
 
 In the constructor inject the AngularFireDatabase object and set links to a Firebase list object from the bookmarks endpoint on the Firebase server. This will be listening to the list of bookmarks. `bookmarks.service.ts`
@@ -346,19 +372,19 @@ addBookmark(name, url) {
 }
 ```
 
-Back in `home.compoment.ts` add the async pipe to the ngFor
+Back in `home.compoment.html` add the async pipe to the ngFor
 
 ```
 <div *ngFor="let bookmark of bookmarks | async">
 ```
 
-Also add some additional code to allow the user to add new bookmarks in `home.component.html`
+Also at the end of `home.component.html` add some input fields to allow the user to add new bookmarks. 
 
 ```
 <div>
   <input placeholder="name" #name>
   <input placeholder="url" #url>
-  <button class="btn btn-primary" (click)="addLink(name, url)">Add Bookmark</button>
+  <button class="btn btn-primary" (click)="addBookmark(name, url)">Add Bookmark</button>
 </div>
 ```
 
