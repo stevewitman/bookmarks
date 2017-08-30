@@ -401,3 +401,53 @@ addBookmark(name, url) {
 Check it out in a couple different browser tabs!
 
 [BACK to Intro to Angular](https://github.com/stevewitman/bookmarks/blob/master/INTRO.md)
+
+## Routing
+
+Eventually we will have two different pages of bookmarks, one that contains only bookmarks that you want to be public and another for all of your bookmarks (private and public) We will save Auth for the next section, for now lets set up routing to reach these two pages.  We will use the home component to display the public bookmarks and create a new `my-bookmarks` component for the private ones.
+
+```
+ng g c my-bookmarks
+```
+
+In the `app.module.ts` file, import routerModule and routes
+
+```
+import { RouterModule, Routes } from '@angular/router';
+```
+
+Also, in the `app.module.ts` file we will define our routes
+
+```
+const appRoutes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'bookmarks', component: BookmarksComponent},
+];
+```
+
+and add to the imports array
+
+```
+RouterModule.forRoot(appRoutes)
+```
+
+Next, in the `app.component.html` we need to replace `<app-home></app-home>` with `<router-outlet></router-outlet>`
+
+```
+<app-navbar></app-navbar>
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>
+```
+
+Now try these routes in the browser  `localhost:4200`, `localhost:4200/home`, and `localhost:4200/bookmarks`.  The first two routes takes you to the home component and that last one takes you to the bookmarks component.
+
+TODO:
+
+- copy functionality from home component to bookmarks component.
+- remove the add bookmark form from the home component.
+- set up auth to prevent unauthorized access to bookmarks component.
+
+
+
