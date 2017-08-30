@@ -407,7 +407,7 @@ Check it out in a couple different browser tabs!
 Eventually we will have two different pages of bookmarks, one that contains only bookmarks that you want to be public and another for all of your bookmarks (private and public) We will save Auth for the next section, for now lets set up routing to reach these two pages.  We will use the home component to display the public bookmarks and create a new `my-bookmarks` component for the private ones.
 
 ```
-ng g c my-bookmarks
+ng g c bookmarks
 ```
 
 In the `app.module.ts` file, import routerModule and routes
